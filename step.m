@@ -2,10 +2,19 @@ function [newLocation, interPlanes, interAngles, newDirection] = step(location, 
 % Input: location of a photon, step length L
 % The photon travels a distance L in a random direction
 % Outputs the new location of the photon
-newLocation = [location(1) + direction(1) * length, ...
-               location(2) + direction(2) * length, ...
-               location(3) + direction(3) * length];
+
+% location is a n x 3 matrix showing the Cartesian locations of n photons
+% direction is a n x 3 matrix showing the direction of each photon
+% length (will eventually) be a n x 3 matrix showing the speed of each
+% photon
+% size is a 1 x 3 vector showing the size of the LSC
+% planes is a 6 x 4 matrix showing the equations of the walls of the LSC
+
+newLocation = [location(:,1) + direction(:,1) * length, ...
+               location(:,2) + direction(:,2) * length, ...
+               location(:,3) + direction(:,3) * length];
 newDirection = direction;
+% figure out everything below this point
 A = all(newLocation - size < 0);
 B = all(newLocation > 0);
 interPlanes = [];
@@ -13,7 +22,7 @@ interAngles = [];
 % if outside box.
 
 if(A * B == 0)
-    interPlanes = zeros(1,6);
+    interPlanes = zeros(n,6);
     %disp("test")
     n = 1;
     for k = 1:6

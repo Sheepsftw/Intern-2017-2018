@@ -29,55 +29,56 @@ planesEscaped = zeros(1,6);
 totalPaths = cell(n,1);
 distTraveled = zeros(1,6);
 numbScattered = zeros(1,6);
-for a = 1:n
-    traveled = [];
-    scattered = 0;
-    % starting location is somewhere on the slab
-    photloc = [rand()*120,rand()*120,size(3)+rand()*stepL];
-    direction = [0,0,-1];
-    % if true, move on to next photon
-    escaped = 0;
-    while ~escaped
-        traveled = (traveled:photloc);
-        % newloc: 1 x 3 vector of the new location of the photon
-        % interPlanes: 1-D vector with the number of the planes that the
-        % photon will intersect
-        % interAngles: Angle at which the photon will intersect each plane
-        % in interPlanes
-        
-        % when calculating traveled, remove the excess when entering and
-        % exiting
-        % try to store each photon's entire path through the LSC in a
-        % 100000x1 cell, the path should be a vector with variable length
-        % and width 3
-        
-        %disp("photloc: " + photloc)
-        [newloc, interPlanes, interAngles, newDirection] = step(photloc, direction, stepL, size, planes);
-        direction = newDirection;
-        %disp("direction: " + direction)
-        for b = 1:numel(interPlanes)
-            probref = probreflect(indexmed, indexair, interAngles(b));
-            %disp("interAngles(b): " + interAngles(b))
-            %disp("probref: " + probref)
-            %disp(1 - probref*probref)
-            % if escaped
-            if(rand() < (1 - probref * probref))
-                escaped = 1;
-                planesEscaped(interPlanes(b)) = planesEscaped(interPlanes(b)) + 1;
-                totalPaths(a,1) = traveled;
-                numbScattered(interPlanes(b)) = numbScattered(interPlanes(b)) + scattered;
-                break;
-            end
-        end
-       
-        photloc = newloc;
-        if(rand()*100 < probChange)
-            scattered = scattered + 1;
-            direction = calculateDirection(1);
+
+
+traveled = [];
+scattered = 0;
+% starting location is somewhere on the slab
+photloc = [rand(n,1)*120,rand(n,1)*120,size(3)+rand(n,1)*stepL];
+direction = [zeros(n,1),zeros(n,1), ones(n,1)] * -1;
+% if true, move on to next photon
+escaped = 0;
+while ~escaped
+    traveled = (traveled:photloc);
+    % newloc: 1 x 3 vector of the new location of the photon
+    % interPlanes: 1-D vector with the number of the planes that the
+    % photon will intersect
+    % interAngles: Angle at which the photon will intersect each plane
+    % in interPlanes
+
+    % when calculating traveled, remove the excess when entering and
+    % exiting
+    % try to store each photon's entire path through the LSC in a
+    % 100000x1 cell, the path should be a vector with variable length
+    % and width 3
+
+    %disp("photloc: " + photloc)
+    [newloc, interPlanes, interAngles, newDirection] = step(photloc, direction, stepL, size, planes);
+    direction = newDirection;
+    %disp("direction: " + direction)
+    for b = 1:numel(interPlanes)
+        probref = probreflect(indexmed, indexair, interAngles(b));
+        %disp("interAngles(b): " + interAngles(b))
+        %disp("probref: " + probref)
+        %disp(1 - probref*probref)
+        % if escaped
+        if(rand() < (1 - probref * probref))
+            escaped = 1;
+            planesEscaped(interPlanes(b)) = planesEscaped(interPlanes(b)) + 1;
+            totalPaths(a,1) = traveled;
+            numbScattered(interPlanes(b)) = numbScattered(interPlanes(b)) + scattered;
+            break;
         end
     end
-    locations(a,:) = photloc;
+
+    photloc = newloc;
+    if(rand()*100 < probChange)
+        scattered = scattered + 1;
+        direction = calculateDirection(1);
+    end
 end
+
+
 numbScattered = numbScattered ./ planesEscaped;
 disp(planesEscaped)
 disp(distTraveled)

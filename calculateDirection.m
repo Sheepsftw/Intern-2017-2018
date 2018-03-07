@@ -1,11 +1,13 @@
-function [newDirection] = calculateDirection(radius)
+function [newDirection] = calculateDirection(radius, N)
 % Randomly generates a Cartesian vector uniformly on a sphere
 % with radius as parameter.
-phi = 2*pi*rand();
-theta = acos(2*rand()-1);
-newDirection = zeros(1,3);
-newDirection(1,1) = radius*sin(theta)*cos(phi);
-newDirection(1,2) = radius*sin(theta)*sin(phi);
-newDirection(1,3) = radius*cos(theta);
+
+% switched to vector
+phi = 2*pi*rand(N,1);
+theta = acos(2*rand(N,1)-1);
+newDirection = zeros(N,3);
+newDirection(:,1) = radius.*sin(theta).*cos(phi);
+newDirection(:,2) = radius.*sin(theta).*sin(phi);
+newDirection(:,3) = radius.*cos(theta);
 end
 

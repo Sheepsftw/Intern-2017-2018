@@ -1,6 +1,9 @@
 function [coefficient] = interCoefficient(pointstart, vector, plane)
 %UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%   pointstart is N x 3
+%   vector is N x 3
+%   plane is N x 4
+% unfinished
 if(plane(1) * vector(1) + plane(2) * vector(2) + plane(3) * vector(3) == 0)
     coefficient = 10000;
 else
