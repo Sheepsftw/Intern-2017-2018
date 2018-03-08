@@ -1,6 +1,8 @@
 function [planes] = createPlanes(sizes)
 % creates an array of vectors [A,B,C,D], 
 % which represent a plane Ax + By + Cz + D = 0.
+
+% does not need to be switched to vector
 planes = zeros(4,6);
 planes(:,1) = [1,0,0,0];
 planes(:,2) = [0,1,0,0];

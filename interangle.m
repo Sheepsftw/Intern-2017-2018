@@ -9,8 +9,8 @@ vector = transpose(vector);
 % disp("dot: " + dot(norm, vector));
 % fix the next line
 cosval = abs(dot(norm, vector) ./ (magnitude(norm) .* magnitude(vector)));
-disp("cosval: " + cosval)
+% disp("cosval: " + cosval)
 angle = acos(cosval);
-%disp("angle: " + angle)
+% disp("angle: " + angle)
 end
 
