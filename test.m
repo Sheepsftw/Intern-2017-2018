@@ -14,4 +14,5 @@ point = zeros(2,3);
 point(1,:) = [0, 0, 0];
 point(2,:) = [1, 9, -1];
 
-disp("reflectVect: " + reflectVect(vector, plane))
+iangle = interangle(vector, plane);
+disp("probreflect: " + probreflect(1, 1.49, iangle));
