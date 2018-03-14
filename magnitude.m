@@ -3,8 +3,7 @@ function [magnitude] = magnitude(vector)
 % vector should be N x 3
 % finished switching to vector
 n = vector.*vector;
-squared = sum(transpose(n));
+squared = sum(n,2);
 magnitude = sqrt(squared);
-magnitude = transpose(magnitude);
 end
 

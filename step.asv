@@ -25,7 +25,7 @@ toChange = logical(toChange);
 interPlanes = [];
 interAngles = [];
 % if outside box.
-newLocation(toChange, :) = 0;
+newLocation(toChange) = 
 
 if(A * B == 0)
     interPlanes = zeros(n,6);

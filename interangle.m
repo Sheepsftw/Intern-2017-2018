@@ -6,9 +6,8 @@ function [angle] = interangle(vector, plane)
 norm = [plane(:,1), plane(:,2), plane(:,3)];
 % disp("magnitude: " + magnitude(norm))
 % disp("dot: " + dot(transpose(norm), transpose(vector)));
-% i really should have fixed the vector order earlier, now there's so many
-% transposes :/
-cosval = abs(transpose(dot(transpose(norm), transpose(vector))) ./ (magnitude(norm) .* magnitude(vector)));
+
+cosval = abs(dot(norm, vector, 2) ./ (magnitude(norm) .* magnitude(vector)));
 % disp("cosval: " + cosval)
 angle = acos(cosval);
 % disp("angle: " + angle)
