@@ -1,4 +1,4 @@
-function [newLocation, interPlanes, interAngles, newDirection] = step(location, direction, length, size, planes) %#ok<*INUSD>
+function [newLocation, interPlanes, interAngles, newDirection] = step(location, direction, length, size, planes, N) %#ok<*INUSD>
 % Input: location of a photon, step length L
 % The photon travels a distance L in a random direction
 % Outputs the new location of the photon
@@ -22,39 +22,30 @@ B = all(newLocation > 0, 2);
 % indexes of vals to change
 toChange = A .* B;
 toChange = logical(toChange);
-interPlanes = [];
-interAngles = [];
-% if outside box.
-newLocation(toChange, :) = 0;
+% not sure about how to do this
+loc2Change = newLocation(toChange, :);
+dir2Change = newDirection(toChange, :);
+interPlanes = 10000 .* ones(N,6); % looks kind of ugl
+interAngles = 10000 .* ones(N,6);
+%disp("test")
 
-if(A * B == 0)
-    interPlanes = zeros(n,6);
-    %disp("test")
-    n = 1;
-    for k = 1:6
-        coeff = interCoefficient(location, direction, planes(:,k));
-        if(coeff > 0 && coeff < length)
-            interPlanes(n) = k;
-            n = n + 1;
-        end
-    end
-    interPlanes = sort(interPlanes);
-    while interPlanes(1) == 0
-        interPlanes(1) = [];
-        % really need to find a better way to do this
-        if(isempty(interPlanes))
-            break;
-        end
-    end
-    %disp("interPlanes: " + interPlanes)
-    interAngles = zeros(1,numel(interPlanes));
-    for a = 1:numel(interPlanes)
-        tempPlane = planes(:,interPlanes(a));
-        newLocation = reflectLoc(newLocation, tempPlane);
-        interAngles(a) = interangle(newDirection, tempPlane);
-        % have to reset the direction
-        newDirection = reflectVect(newDirection, tempPlane);
-    end
+% dunno how to remove this loop
+for k = 1:6
+    tempPlane = repmat(planes(:,k),N,1);
+    coeff = interCoefficient(loc2Change, dir2Change, tempPlane);
+    interPlanes(coeff > 0 && coeff < length, n) = k;
+    n = n + 1;
+end
+interPlanes = sort(interPlanes,2);
+% below this line is unfinished
+% right now interPlanes is full of smaller numbers and 10000s
+%disp("interPlanes: " + interPlanes)
+for a = 1:numel(interPlanes)
+    tempPlane = planes(:,interPlanes(a));
+    newLocation = reflectLoc(newLocation, tempPlane);
+    interAngles(a) = interangle(newDirection, tempPlane);
+    % have to reset the direction
+    newDirection = reflectVect(newDirection, tempPlane);
 end
 
 end

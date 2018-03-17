@@ -73,17 +73,19 @@ while ~escaped
     end
 
     photloc = newloc;
-    %dirschange = indexes of which directions to change
-    dirsschange = 
-    direction(dirschange) = calculateDirection(1,length(dirschange));
     totalPaths = totalPaths:photloc;
+    %changing direction should work now
+    %dirschange = indexes of which directions to change
+    dirschange = rand(N,1)*100 > probChange;
+    direction(dirschange) = calculateDirection(1,length(dirschange));
+    % need to figure out a way to remove 
 end
 
-%
+%{
 numbScattered = numbScattered ./ planesEscaped;
 disp(planesEscaped)
 disp(distTraveled)
 disp(numbScattered)
-%
+%}
 toc
 

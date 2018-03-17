@@ -40,7 +40,7 @@ direction = [zeros(n,1),zeros(n,1), ones(n,1)] * -1;
 escaped = 0;
 counter = 1;
 while ~escaped
-    traveled = (traveled:photloc);
+    % traveled = (traveled:photloc);
     % newloc: 1 x 3 vector of the new location of the photon
     % interPlanes: 1-D vector with the number of the planes that the
     % photon will intersect
@@ -54,7 +54,7 @@ while ~escaped
     % and width 3
 
     %disp("photloc: " + photloc)
-    [newloc, interPlanes, interAngles, newDirection] = step(photloc, direction, stepL, size, planes);
+    [newloc, interPlanes, interAngles, newDirection] = step(photloc, direction, stepL, size, planes, N);
     direction = newDirection;
     %disp("direction: " + direction)
     for b = 1:numel(interPlanes)
@@ -73,12 +73,12 @@ while ~escaped
     end
 
     photloc = newloc;
-    totalPaths = totalPaths:photloc;
+    % totalPaths = totalPaths:photloc;
     %changing direction should work now
     %dirschange = indexes of which directions to change
     dirschange = rand(N,1)*100 > probChange;
     direction(dirschange) = calculateDirection(1,length(dirschange));
-    
+    % need to figure out a way to remove finished photons from the list
 end
 
 %{

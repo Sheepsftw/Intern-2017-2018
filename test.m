@@ -2,12 +2,9 @@ vector = zeros(2,3);
 vector(1,:) = [1, 3, 4];
 vector(2,:) = [5, 7, 2];
 
-vect = [true, false, true];
-vect2 = [true, true, false];
-vect = vect .* vect2;
-val = [-1, 2, 1];
-val(logical(vect)) = 5;
-disp("changed: " + val)
+vector = sort(vector, 2);
+disp("sorted: " + vector)
+
 
 % disp("magnitude: " + magnitude(vector))
 plane = zeros(2,4);
