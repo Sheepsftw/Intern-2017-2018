@@ -10,6 +10,8 @@ function [newLocation, interPlanes, interAngles, newDirection] = step(location, 
 % size is a 1 x 3 vector showing the size of the LSC
 % planes is a 6 x 4 matrix showing the equations of the walls of the LSC
 
+% finished switching to vector
+
 newLocation = [location(:,1) + direction(:,1) * length, ...
                location(:,2) + direction(:,2) * length, ...
                location(:,3) + direction(:,3) * length];
@@ -40,8 +42,10 @@ interPlanes = sort(interPlanes,2);
 % below this line is unfinished
 % right now interPlanes is full of smaller numbers and 10000s
 %disp("interPlanes: " + interPlanes)
-for a = 1:numel(interPlanes)
-    tempPlane = planes(:,interPlanes(a));
+for a = 1:3 % if needed, change to size(interPlanes, 2)
+    % should create an array of tempPlanes
+    tempIndex = interPlanes(:,a) ~= 10000;
+    tempPlane = planes(:,interPlanes(tempIndex)); % careful
     newLocation = reflectLoc(newLocation, tempPlane);
     interAngles(a) = interangle(newDirection, tempPlane);
     % have to reset the direction

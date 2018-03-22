@@ -37,9 +37,8 @@ scattered = 0;
 photloc = [rand(n,1)*120,rand(n,1)*120,size(3)+rand(n,1)*stepL];
 direction = [zeros(n,1),zeros(n,1), ones(n,1)] * -1;
 % if true, move on to next photon
-escaped = 0;
 counter = 1;
-while ~escaped
+while size(photloc,1) > 0
     % traveled = (traveled:photloc);
     % newloc: 1 x 3 vector of the new location of the photon
     % interPlanes: 1-D vector with the number of the planes that the
@@ -54,11 +53,12 @@ while ~escaped
     % and width 3
 
     %disp("photloc: " + photloc)
+    escaped = zeros(size(photloc,1), 0);
     [newloc, interPlanes, interAngles, newDirection] = step(photloc, direction, stepL, size, planes, N);
     direction = newDirection;
     %disp("direction: " + direction)
     for b = 1:numel(interPlanes)
-        probref = probreflect(indexmed, indexair, interAngles(b));
+        probref = probreflect(indexmed, indexair, interAngles(:,b));
         %disp("interAngles(b): " + interAngles(b))
         %disp("probref: " + probref)
         %disp(1 - probref*probref)
