@@ -1,4 +1,4 @@
-function [newLocation, interPlanes, interAngles, newDirection] = step(location, direction, length, size, planes, N) %#ok<*INUSD>
+function [newLocation, interPlanes, interAngles, newDirection] = step(location, direction, length, size, planes, N, escaped) %#ok<*INUSD>
 % Input: location of a photon, step length L
 % The photon travels a distance L in a random direction
 % Outputs the new location of the photon
@@ -11,21 +11,21 @@ function [newLocation, interPlanes, interAngles, newDirection] = step(location, 
 % planes is a 6 x 4 matrix showing the equations of the walls of the LSC
 
 % finished switching to vector
+tempLocation = [location(escaped ~= true,1) + direction(escaped ~= true,1) * length, ...
+               location(escaped ~= true,2) + direction(escaped ~= true,2) * length, ...
+               location(escaped ~= true,3) + direction(escaped ~= true,3) * length];
 
-newLocation = [location(:,1) + direction(:,1) * length, ...
-               location(:,2) + direction(:,2) * length, ...
-               location(:,3) + direction(:,3) * length];
-newDirection = direction;
+tempDirection = direction(escaped ~= true);
 % figure out everything below this point
 
 % A and B are both N x 1 vectors
-A = all(newLocation - size < 0, 2);
-B = all(newLocation > 0, 2);
+A = all(tempLocation - size < 0, 2);
+B = all(tempLocation > 0, 2);
 % indexes of vals to change
 toChange = A .* B;
 toChange = logical(toChange);
 % not sure about how to do this
-loc2Change = newLocation(toChange, :);
+loc2Change = tempLocation(toChange, :);
 dir2Change = newDirection(toChange, :);
 interPlanes = 10000 .* ones(N,6); % looks kind of ugl
 interAngles = 10000 .* ones(N,6);
@@ -45,12 +45,16 @@ interPlanes = sort(interPlanes,2);
 for a = 1:3 % if needed, change to size(interPlanes, 2)
     % should create an array of tempPlanes
     tempIndex = interPlanes(:,a) ~= 10000;
-    tempPlane = planes(:,interPlanes(temp)); % careful
+    tempPlane = planes(:,interPlanes(tempIndex)); % careful
     newLocation = reflectLoc(newLocation, tempPlane);
     interAngles(a) = interangle(newDirection, tempPlane);
     % have to reset the direction
     newDirection = reflectVect(newDirection, tempPlane);
 end
+
+newLocation = location;
+newLocation(escaped) = location(escaped);
+newDirection = te
 
 end
 

@@ -35,10 +35,13 @@ traveled = [];
 scattered = 0;
 % starting location is somewhere on the slab
 photloc = [rand(n,1)*120,rand(n,1)*120,size(3)+rand(n,1)*stepL];
+escaped = false(n,1);
+planesEscaped = zeros(n,1);
 direction = [zeros(n,1),zeros(n,1), ones(n,1)] * -1;
 % if true, move on to next photon
-counter = 1;
-while size(photloc,1) > 0
+counter = 0;
+while ~all(escaped)
+    counter = counter + 1;
     % traveled = (traveled:photloc);
     % newloc: 1 x 3 vector of the new location of the photon
     % interPlanes: 1-D vector with the number of the planes that the
@@ -53,26 +56,30 @@ while size(photloc,1) > 0
     % and width 3
 
     %disp("photloc: " + photloc)
-    escaped = zeros(size(photloc,1), 0);
-    [newloc, interPlanes, interAngles, newDirection] = step(photloc, direction, stepL, size, planes, N);
+    photstep = photloc(escaped ~= true);
+    [newloc, interPlanes, interAngles, newDirection] = step(photstep, direction, stepL, size, planes, N, escaped);
     direction = newDirection;
+    totalPaths(escaped ~= true, counter) = photloc(escaped ~= true);
     %disp("direction: " + direction)
-    for b = 1:numel(interPlanes)
-        probref = probreflect(indexmed, indexair, interAngles(:,b));
+    for b = 1:3
+        % make it so that interAngles is n x 3
+        probref = probreflect(indexmed, indeair, interAngles(:,b));
         %disp("interAngles(b): " + interAngles(b))
         %disp("probref: " + probref)
         %disp(1 - probref*probref)
         % if escaped
-        if(rand() < (1 - probref * probref))
-            escaped = 1;
-            planesEscaped(interPlanes(b)) = planesEscaped(interPlanes(b)) + 1;
-            totalPaths(a,1) = traveled;
-            numbScattered(interPlanes(b)) = numbScattered(interPlanes(b)) + scattered;
-            break;
-        end
+        
+        %pretty inefficient
+        probtrans = ones(n,1) - probref .* probref;
+        transmitted = rand(n,1) < probtrans;
+        escaped(transmitted) = true;
+        
+        planesEscaped() = interPlanes(,b);
+        
+        planesEscaped(interPlanes(b)) = planesEscaped(interPlanes(b)) + 1;
     end
 
-    photloc = newloc;
+    photloc(escaped ~= true) = newloc(escaped ~= true);
     % totalPaths = totalPaths:photloc;
     %changing direction should work now
     %dirschange = indexes of which directions to change

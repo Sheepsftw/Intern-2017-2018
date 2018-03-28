@@ -3,7 +3,9 @@ vector(1,:) = [1, 3, 4];
 vector(2,:) = [5, 7, 2];
 
 vect = [1, 3, 5];
-tempIndex = vector(:,1) ~= 5;
+tempIndex = [2, 2, 1, 2];
+vect(tempIndex) = vect(tempIndex) + 1;
+disp("vect: " + vect)
 disp("tempIndex: " + tempIndex)
 
 % disp("magnitude: " + magnitude(vector))
