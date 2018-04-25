@@ -5,6 +5,9 @@ function [coefficient] = interCoefficient(pointstart, vector, plane)
 %   plane is N x 4
 %   finished switching to vector
 
+% disp("size1: " + size(pointstart))
+% disp("size2: " + size(vector))
+% disp("size3: " + size(plane))
 % disp("plane: " + plane(:,1))
 % disp("vector: " + vector(:,1))
     

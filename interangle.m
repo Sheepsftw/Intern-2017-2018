@@ -6,6 +6,8 @@ function [angle] = interangle(vector, plane)
 norm = [plane(:,1), plane(:,2), plane(:,3)];
 % disp("magnitude: " + magnitude(norm))
 % disp("dot: " + dot(transpose(norm), transpose(vector)));
+% disp("size1: " +  size(norm))
+% disp("size2: " + size(vector))
 
 cosval = abs(dot(norm, vector, 2) ./ (magnitude(norm) .* magnitude(vector)));
 % disp("cosval: " + cosval)
