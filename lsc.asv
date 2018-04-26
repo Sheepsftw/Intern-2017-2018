@@ -41,10 +41,10 @@ direction = [zeros(n,1),zeros(n,1), ones(n,1)] * -1;
 % if true, move on to next photon
 counter = 0;
 while ~all(escaped)
-    %disp(sum(escaped))
-    %if(sum(escaped) > 99990)
-    %    disp(find(~escaped))
-    %end
+    disp(sum(escaped))
+    if(sum(escaped) > 99990)
+        disp(find(~escaped))
+    end
     counter = counter + 1;
     % traveled = (traveled:photloc);
     % newloc: 1 x 3 vector of the new location of the photon
@@ -95,7 +95,6 @@ while ~all(escaped)
     % disp("lastDir: " + direction(1,:))
     % disp("lastEsc: " + escaped)
     % disp("lastLoc: " + newloc(1,:)
-    totalPaths{counter, 1} = photloc;
     photloc = newloc;
     
     %changing direction should work now

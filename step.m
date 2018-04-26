@@ -45,7 +45,6 @@ toPlanes = 10000 .* ones(size(loc2Change,1),6);
 n = 1;
 for k = 1:6
     changePlane = transpose(repmat(planes(:,k),1,size(loc2Change,1)));
-    
     coeff = interCoefficient(loc2Change, -dir2Change, changePlane);
     toPlanes(coeff > 0, n) = k;
     toPlanes(coeff > length, n) = 10000;
@@ -61,7 +60,7 @@ for a = 1:3 % if needed, change to size(interPlanes, 2)
     tempIndex = interPlanes(:,a) ~= 10000;
     
     if(any(tempIndex))
-        tempPlane = transpose(planes(:,interPlanes(tempIndex))); % careful
+        tempPlane = transpose(planes(:,interPlanes(tempIndex,a))); % careful
         % disp("tempPlane: " + tempPlane)
         % disp("tempLoc: " + tempLocation(tempIndex))
         % disp("sizeInterAngles: " + size(interAngles))
