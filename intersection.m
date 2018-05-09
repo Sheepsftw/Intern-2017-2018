@@ -4,10 +4,11 @@ function [pointend] = intersection(pointstart, vector, plane)
 
 %   finished switching to vector
 t = interCoefficient(pointstart, vector, plane);
+newvect = vector ./ magnitude(vector);
 
-x = pointstart(:,1) + vector(:,1) .* t;
-y = pointstart(:,2) + vector(:,2) .* t;
-z = pointstart(:,3) + vector(:,3) .* t;
+x = pointstart(:,1) + newvect(:,1) .* t;
+y = pointstart(:,2) + newvect(:,2) .* t;
+z = pointstart(:,3) + newvect(:,3) .* t;
 pointend = [x,y,z];
 end
 

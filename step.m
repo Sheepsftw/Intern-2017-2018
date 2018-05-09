@@ -52,7 +52,6 @@ for k = 1:6
 end
 toPlanes = sort(toPlanes,2);
 interPlanes(toChange,:) = toPlanes;
-% below this line is unfinished
 % right now interPlanes is full of smaller numbers and 10000s
 %disp("interPlanes: " + interPlanes)
 for a = 1:3 % if needed, change to size(interPlanes, 2)
